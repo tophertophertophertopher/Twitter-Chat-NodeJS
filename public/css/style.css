@@ -1,0 +1,45 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url('../img/bg-w.png');
+  color:#121212;
+  min-width:650px;
+}
+
+
+a {
+  color: #00B7FF;
+}
+
+.dropdown{
+  cursor:pointer;
+}
+
+
+.uimg-nav{
+  width: 34px;
+  height: 34px;
+  margin-top: -8px;
+  float: left;
+  margin-right: 7px;
+  border:1px solid #3E9EBE;
+}
+
+.user-img{
+  float:left;
+  margin-top:16px;
+}
+
+#input_controls{
+  padding:20px;
+  width: 810px;
+  margin: 0 auto;
+  background:#F0f0f0;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+#chat_message{
+  width:690px;
+  height:80px;
+}

@@ -1,0 +1,30 @@
+nav.navbar-fixed-top.navbar
+  div.navbar-inner
+    div.container        
+      ul.nav.pull-right
+        li.divider-vertical       
+        li.dropdown
+          a.dropdown-toggle            
+            span @ #{user.screen_name}
+              image(src='#{user.image}').uimg-nav
+            b.caret
+          ul.dropdown-menu
+            li
+              a(href="/auth/logout/") Sign Out
+                
+              
+.container
+  h1= title 
+  p #{body}
+  
+  div#input_controls
+    div
+      span.span1 
+        image(src='#{user.image}')
+      textarea#chat_message.span8(name='message')
+    div.clearfix
+      div.span6 &nbsp;  
+      button.btn.btn-large.btn-success.span2 Send Message  
+        i.icon-white.icon-comment
+          
+  script(type='text/javascript', src='nowjs/now.js')
