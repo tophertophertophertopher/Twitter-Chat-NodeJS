@@ -4,18 +4,18 @@
  * Module dependencies.
 */
 
-//Load express, routes, http, and Oauth modules
+//Load express, routes, HTTP, and Oauth modules
 var express = require('express'),
 	routes = require('./routes'),
   OAuth = require('oauth').OAuth,
   http = require('http');
   
-///setup OAUTH config for Twitter
+///setup OAUTH configure for Twitter
 var oa = new OAuth(
   "https://api.twitter.com/oauth/request_token",
   "https://api.twitter.com/oauth/access_token",
-  "app-api-key",
-  "app-api-secret",
+  "KEY",
+  "SECRET",
   "1.0",
   "oob",
   "HMAC-SHA1"
@@ -70,6 +70,8 @@ app.get('/',function(req, res){
 	}
 });
 
+app.get('/test', function(req, res){ routes.test(req, res) });
+
 
 // fake oauth login, for testing locally without reliable connection to twitter
 app.get('/auth/fake', function(req, res, next){
@@ -78,6 +80,17 @@ app.get('/auth/fake', function(req, res, next){
 	req.session.user.image = "https://si0.twimg.com/sticky/default_profile_images/default_profile_0_normal.png";
 	res.redirect('/');
 });
+
+// fake oauth login, for testing locally without reliable connection to twitter
+app.get('/auth/fake/:id', function(req, res, next){
+  req.session.user = {};
+  req.session.user.screen_name = req.params.id;
+  req.session.user.image = "https://si0.twimg.com/sticky/default_profile_images/default_profile_0_normal.png";
+  res.redirect('/');
+});
+
+
+
 
 //Twitter authentication Oauth hook.
 app.get('/auth/twitter', function(req, res, next){

@@ -25,6 +25,13 @@ a {
   border:1px solid #3E9EBE;
 }
 
+.message{
+  margin: 5px;
+  padding:20px;
+  background:#FAFAFA;
+  border:1px solid #3E9EBE;
+}
+
 .user-img{
   text-align: right;
 }
