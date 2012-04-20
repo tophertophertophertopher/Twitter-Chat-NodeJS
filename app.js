@@ -10,14 +10,14 @@ var express = require('express'),
   OAuth = require('oauth').OAuth,
   http = require('http');
   
-///
+///setup OAUTH config for Twitter
 var oa = new OAuth(
   "https://api.twitter.com/oauth/request_token",
   "https://api.twitter.com/oauth/access_token",
-  "API-KEY",
-  "API-SECRET",
+  "app-api-key",
+  "app-api-secret",
   "1.0",
-  "example.com/auth/twitter/callback",
+  "oob",
   "HMAC-SHA1"
 );
 
@@ -30,7 +30,8 @@ app.configure(function(){
   app.set('view engine', 'jade'); // use JADE template engine
   app.use(express.bodyParser());
   app.use(express.cookieParser());
-  app.use(express.session({ secret:"I see dead people" })); //SPOIL'D! Dr. Malcolm Crowe is dead!
+  //use the session handler... can I tell you my secret now?
+  app.use(express.session({ secret:"I see dead people" })); //secret salt for sessions //SPOIL'D! Dr. Malcolm Crowe is dead!
   app.use(express.methodOverride()); 
   app.use(app.router); // use routes
   app.use(express.static(__dirname + '/public')); // serve statics from public folder
@@ -53,36 +54,42 @@ var everyone = nowjs.initialize(app);
 //*** Routes ***//
 
 //main index route; handles user session state to determine whether they have logged in
-//and renders the corresponding modular route.
-
-
-
-
-    
+//and renders the corresponding modular route. 
 app.get('/',function(req, res){ 
+	
+	///check for user
 	if(req.session.user)
-	{	  
+	{	
+		//render index route with nowJS middleware
 		routes.index(req,res,nowjs,everyone);		
 	}
 	else
 	{
+		//login route
 		routes.login(req,res);
 	}
 });
 
 
+// fake oauth login, for testing locally without reliable connection to twitter
+app.get('/auth/fake', function(req, res, next){
+	req.session.user = {};
+	req.session.user.screen_name = 'topherbullock';
+	req.session.user.image = "https://si0.twimg.com/sticky/default_profile_images/default_profile_0_normal.png";
+	res.redirect('/');
+});
+
 //Twitter authentication Oauth hook.
-app.get('/auth/twitter', function(req, res){
-  
+app.get('/auth/twitter', function(req, res, next){
   //get OA request token from twitter OA api
 	oa.getOAuthRequestToken(function(error, oauth_token, oauth_token_secret, results){
 		if (error) { //something go south?		  
-			console.log("Could not connect to Twitter.");/// increase verbosity of internal log 
+			console.log("Could not connect to Twitter.");/// increase verboity of internal log 
 			// throw Error if something goes wrong.
 			next(new Error("Could not connect to Twitter."));
 		}
 		else { // good to go?
-			req.session.sentAuth = true; // log that a token has been recieved 
+			req.session.sentAuth = true; // log that a token has been received 
 			req.session.oauth = {}; //instantiate oath user session hash
 			req.session.oauth.token = oauth_token; // store token in user session hash
 			req.session.oauth.token_secret = oauth_token_secret; // store token secret in user session hash
@@ -127,7 +134,7 @@ app.get('/auth/twitter/callback', function(req, res, next){
 				}).on('error', function(e) {
 				  //if the get request fails just use a default image
 				  //// (shouldn't fail if the user is able to log in, but JIC')
-				  req.session.user.image = "https://si0.twimg.com/sticky/default_profile_images/default_profile_0_reasonably_small.png";
+				  req.session.user.image = "https://si0.twimg.com/sticky/default_profile_images/default_profile_0_normal.png";
 				  res.redirect('/');
 				});
 			}
@@ -139,9 +146,8 @@ app.get('/auth/twitter/callback', function(req, res, next){
 
 //Authentication logout
 app.get('/auth/logout', function(req, res){
-  
+  //clear out the user hash by re-initializing.
   req.session.user = false;
-  
   res.redirect('/');
 });
 

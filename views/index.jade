@@ -17,14 +17,20 @@ nav.navbar-fixed-top.navbar
   h1= title 
   p #{body}
   
-  div#input_controls
-    div
-      span.span1 
-        image(src='#{user.image}')
-      textarea#chat_message.span8(name='message')
-    div.clearfix
-      div.span6 &nbsp;  
-      button.btn.btn-large.btn-success.span2 Send Message  
+  div#messages
+    
+  
+  div#input_controls.clearfix
+    div.span1.user-img
+      image(src='#{user.image}')
+    div.span5
+      input#chat_message(name='message')
+    div.span2  
+      button#send_message.btn.btn-large.btn-success Send Message  
         i.icon-white.icon-comment
-          
-  script(type='text/javascript', src='nowjs/now.js')
+
+script(type='text/javascript', src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js')
+script(type='text/javascript', src='js/bootstrap.min.js');
+script(type='text/javascript', src='js/script.js');
+script(type='text/javascript', src='nowjs/now.js')
+script(type='text/javascript', src='js/now-script.js')

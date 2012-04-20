@@ -26,20 +26,17 @@ a {
 }
 
 .user-img{
-  float:left;
-  margin-top:16px;
+  text-align: right;
 }
 
 #input_controls{
   padding:20px;
-  width: 810px;
-  margin: 0 auto;
   background:#F0f0f0;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
 }
 
 #chat_message{
-  width:690px;
-  height:80px;
+  height:30px;
+  width:100%;
 }
